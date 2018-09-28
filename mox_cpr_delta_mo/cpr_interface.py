@@ -1,6 +1,6 @@
 # -- coding: utf-8 --
 #
-# Copyright (c) 2017, Magenta ApS
+# Copyright (c) 2018, Magenta ApS
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
