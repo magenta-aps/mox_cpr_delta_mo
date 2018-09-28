@@ -1,4 +1,5 @@
 import argparse
+import datetime
 
 from mox_cpr_delta_mo import (
     mora_get_all_cpr_numbers,
@@ -24,8 +25,9 @@ def update_cpr_subscriptions():
 
 def cpr_delta_update_mo(sincedate):
     for date,citizens in get_cpr_delta_udtraek(sincedate).items():
+        fromdate = datetime.datetime.strptime(date, "%y%m%d" )
         for pnr, changes in citizens.items():
-            mora_update_person_by_cprnumber(pnr, changes)
+            mora_update_person_by_cprnumber(fromdate, pnr, changes)
 
 
 if __name__ == '__main__':
