@@ -10,20 +10,27 @@
 import xmltodict
 import settings
 import cpr_udtraek
+import cpr_abonnement
+import os
+import logging
 
-from cpr_abonnement.cpr_abonnement import (
-    pnr_subscription,
-)
+logger = logging.getLogger("mox_cpr_delta_mo")
 
+from cpr_abonnement.cpr_abonnement import pnr_subscription
 
 abo_dependencies = {
-    'service_endpoint': settings.SP_ABO_SERVICE_ENDPOINT,
-    'certificate': settings.SP_ABO_CERTIFICATE,
-    'soap_request_envelope': settings.SP_ABO_SOAP_REQUEST_ENVELOPE,
-    'system': settings.SP_ABO_SYSTEM,
-    'user': settings.SP_ABO_USER,
-    'service_agreement': settings.SP_ABO_SERVICE_AGREEMENT,
-    'service': settings.SP_ABO_SERVICE
+    "service_endpoint": settings.SP_ABO_SERVICE_ENDPOINT,
+    "certificate": settings.SP_ABO_CERTIFICATE,
+    "soap_request_envelope": (
+        settings.SP_ABO_SOAP_REQUEST_ENVELOPE
+        or os.path.join(
+            os.path.dirname(cpr_abonnement.cpr_abonnement.__file__), "soap_envelope.xml"
+        )
+    ),
+    "system": settings.SP_ABO_SYSTEM,
+    "user": settings.SP_ABO_USER,
+    "service_agreement": settings.SP_ABO_SERVICE_AGREEMENT,
+    "service": settings.SP_ABO_SERVICE,
 }
 
 
@@ -46,44 +53,29 @@ def get_cpr_delta_udtraek(sincedate):
 
 
 def add_cpr_subscription(pnr):
-    result = change_cpr_subscription(
-        pnr,
-        settings.ADD_PNR_SUBSCRIPTION
-    )
+    logger.debug("add subscription for %s", pnr)
+    result = change_cpr_subscription(pnr, settings.ADD_PNR_SUBSCRIPTION)
     return result == "ADDED"
 
 
 def remove_cpr_subscription(pnr):
-    result = change_cpr_subscription(
-        pnr,
-        settings.REMOVE_PNR_SUBSCRIPTION
-    )
+    logger.debug("remove subscription for %s", pnr)
+    result = change_cpr_subscription(pnr, settings.REMOVE_PNR_SUBSCRIPTION)
     return result == "REMOVED"
 
 
 def get_all_subscribed_cprs():
+    logger.debug("get_all_subscribed_cprs")
     return []
 
 
-def change_cpr_subscription(cpr, operation):
+def change_cpr_subscription(pnr, operation):
     cpr_abonnement_response_envelope = pnr_subscription(
-         dependencies_dict=abo_dependencies,
-         pnr=pnr,
-         operation=operation
+        dependencies_dict=abo_dependencies, pnr=pnr, operation=operation
     )
 
     reply = xmltodict.parse(cpr_abonnement_response_envelope)
 
-    operation_response_key = 'ns3:{}Response'.format(operation)
+    operation_response_key = "ns3:{}Response".format(operation)
 
-    return reply[
-        'soap:Envelope'
-    ][
-        'soap:Body'
-    ][  
-        operation_response_key
-    ][
-        'ns3:Result'
-    ]
-    
-
+    return reply["soap:Envelope"]["soap:Body"][operation_response_key]["ns3:Result"]
