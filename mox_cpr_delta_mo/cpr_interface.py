@@ -8,7 +8,8 @@
 
 
 import xmltodict
-import settings 
+import settings
+
 # settings must be imported before cpr_udtraek and cpr_abonnement
 import cpr_udtraek
 import cpr_abonnement
@@ -75,9 +76,6 @@ def change_cpr_subscription(pnr, operation):
     cpr_abonnement_response_envelope = pnr_subscription(
         dependencies_dict=abo_dependencies, pnr=pnr, operation=operation
     )
-
     reply = xmltodict.parse(cpr_abonnement_response_envelope)
-
     operation_response_key = "ns3:{}Response".format(operation)
-
     return reply["soap:Envelope"]["soap:Body"][operation_response_key]["ns3:Result"]
