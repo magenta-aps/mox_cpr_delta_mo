@@ -23,7 +23,7 @@ class TestMoxCprDeltaMo(unittest.TestCase):
         logstash.clear()
 
     def test_mora_get_all_cpr_numbers(self):
-        # Anders And and Fedtmule
+        "get both cpr numbers in the system"
         self.assertEqual(mo.mora_get_all_cpr_numbers(),[
             '1011101010', 
             '0101001010',
@@ -31,6 +31,7 @@ class TestMoxCprDeltaMo(unittest.TestCase):
 
 
     def test_mora_update_person_by_cprnumber(self):
+        "rename 'Sanne Schäff' to 'Mo Minsk Mohsen'"
         mo.mora_update_person_by_cprnumber(
             fromdate="2018-09-10",
             pnr='1011101010',
@@ -40,8 +41,6 @@ class TestMoxCprDeltaMo(unittest.TestCase):
                 'efternavn':"Mohsen"
             }
         )
-        pass
-
-
-
+        employees = mo.mora_eployees_from_cpr("1011101010")
+        self.assertEqual(["Mo Minsk Mohsen"], [e["name"] for e in employees])
 
