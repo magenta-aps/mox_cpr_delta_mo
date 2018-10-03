@@ -15,7 +15,10 @@ import settings
 # settings must be imported before cpr_udtraek and cpr_abonnement
 import cpr_udtraek
 import cpr_abonnement
-from cpr_abonnement.cpr_abonnement import pnr_subscription
+from cpr_abonnement.cpr_abonnement import (
+    pnr_subscription,
+    pnr_all_subscribed,
+)
 
 
 logger = logging.getLogger("mox_cpr_delta_mo")
@@ -70,6 +73,11 @@ def cpr_remove_subscription(pnr):
 
 def cpr_get_all_subscribed():
     logger.debug("cpr_get_all_subscribed")
+    cpr_abonnement_response_envelope = pnr_all_subscribed(
+        dependencies_dict=abo_dependencies, 
+        pnr=pnr, 
+        operation=settings.GET_PNR_SUBSCRIPTIONS,
+    )
     return []
 
 
