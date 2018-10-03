@@ -81,7 +81,6 @@ def mora_update_person_by_cprnumber(fromdate, pnr, changes):
         mora_post(
             # lets say type defaults to 'employee'
             url="{BASE}/e/" + e["uuid"] + "/edit",
-            original=e,
             data=relevant_changes,
             validity={"from": fromdate},
         )
