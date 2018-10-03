@@ -8,9 +8,11 @@
 
 
 import xmltodict
-import settings
+import settings 
+# settings must be imported before cpr_udtraek and cpr_abonnement
 import cpr_udtraek
 import cpr_abonnement
+
 import os
 import logging
 
