@@ -36,12 +36,32 @@ Here is a settings file filled with sample values
     SP_ABO_USER = "0fb8a2c0-c6e2-11e8-8724-234888bfbd3a"  # uuid of the user
     SP_ABO_SERVICE_AGREEMENT = "0fb8a2c0-c6e2-11e8-8724-234888bfbd3a"  # uuid of the service aggreement
     SP_ABO_SERVICE = "0fb8a2c0-c6e2-11e8-8724-234888bfbd3a"  # uuid of the service
-    ADD_PNR_SUBSCRIPTION = ""  # name of action (for envelope)
-    REMOVE_PNR_SUBSCRIPTION = ""  # name of action (for envelope)
+    ADD_PNR_SUBSCRIPTION = "AddPNRSubscription"  # name of action (for envelope)
+    REMOVE_PNR_SUBSCRIPTION = "RemovePNRSubscription"  # name of action (for envelope)
 
     # mora settings 
     MORA_HTTP_BASE = "http://10.0.3.161:5000/service"  # MO http base - should end with '/service'
     MORA_ORG_UUID = "0fb8a2c0-c6e2-11e8-8724-234888bfbd3a"  # The MO organisation uuid
 
+```
+Running the program (settings.py must be in python-path)
+
+``` bash
+python -m mox_cpr_delta_mo    
+```
+
+
+Running the tests.
+
+unittests:
+
+```
+python -m unittest discover tests 
+```
+
+integration tests - With suitable testdata in Mora tests can be run like
+
+``` bash
+python -m unittest discover tests -p 'integration_test*'
 ```
 
