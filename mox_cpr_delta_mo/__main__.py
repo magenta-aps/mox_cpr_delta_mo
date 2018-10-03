@@ -13,10 +13,10 @@ import logging
 from mox_cpr_delta_mo import (
     mora_get_all_cpr_numbers,
     mora_update_person_by_cprnumber,
-    get_cpr_delta_udtraek,
-    add_cpr_subscription,
-    remove_cpr_subscription,
-    get_all_subscribed_cprs,
+    cpr_get_delta_udtraek,
+    cpr_add_subscription,
+    cpr_remove_subscription,
+    cpr_get_all_subscribed,
 )
 from settings import MOX_LOG_LEVEL
 
@@ -26,7 +26,7 @@ from settings import MOX_LOG_LEVEL
     for i in logging.root.manager.loggerDict
 ]
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=MOX_LOG_LEVEL)
 logger = logging.getLogger("mox_cpr_delta_mo")
 logger.setLevel(logging.DEBUG)
 
@@ -35,20 +35,22 @@ def update_cpr_subscriptions():
     "add or remove subscriptions according to mora data"
     logger.debug("update_cpr_subscriptions started")
     must_subscribe = set(mora_get_all_cpr_numbers())
-    are_subscribed = set(get_all_subscribed_cprs())
+    are_subscribed = set(cpr_get_all_subscribed())
     add_set = must_subscribe - are_subscribed
     remove_set = are_subscribed - must_subscribe
     for pnr in remove_set:
-        remove_cpr_subscription(pnr)
+        cpr_remove_subscription(pnr)
     for pnr in add_set:
-        add_cpr_subscription(pnr)
+        cpr_add_subscription(pnr)
     logger.debug("update_cpr_subscriptions ended")
 
 
 def cpr_delta_update_mo(sincedate):
-    for date, citizens in get_cpr_delta_udtraek(sincedate).items():
+    for date, citizens in cpr_get_delta_udtraek(sincedate).items():
         # let python do the Y2K math
-        fromdate = datetime.datetime.strptime(date, "%y%m%d").strftime("%Y-%m-%d")
+        fromdate = datetime.datetime.strptime(date, "%y%m%d").strftime(
+            "%Y-%m-%d"
+        )
         for pnr, changes in citizens.items():
             mora_update_person_by_cprnumber(fromdate, pnr, changes)
 
@@ -58,7 +60,8 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--update-cpr-subscriptions",
-        help="find subscriptions for all cpr-numbers, update subscriptions for the ones "
+        help="find subscriptions for all cpr-numbers, update "
+        "subscriptions for the ones "
         "that are missing in subscrition, remove the ones missing in mora",
         action="store_true",
         default=False,

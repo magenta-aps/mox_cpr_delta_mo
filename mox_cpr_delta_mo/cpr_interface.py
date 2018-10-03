@@ -7,19 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+import os
+import logging
 import xmltodict
 import settings
 
 # settings must be imported before cpr_udtraek and cpr_abonnement
 import cpr_udtraek
 import cpr_abonnement
+from cpr_abonnement.cpr_abonnement import pnr_subscription
 
-import os
-import logging
 
 logger = logging.getLogger("mox_cpr_delta_mo")
 
-from cpr_abonnement.cpr_abonnement import pnr_subscription
 
 abo_dependencies = {
     "service_endpoint": settings.SP_ABO_SERVICE_ENDPOINT,
@@ -27,7 +27,8 @@ abo_dependencies = {
     "soap_request_envelope": (
         settings.SP_ABO_SOAP_REQUEST_ENVELOPE
         or os.path.join(
-            os.path.dirname(cpr_abonnement.cpr_abonnement.__file__), "soap_envelope.xml"
+            os.path.dirname(cpr_abonnement.cpr_abonnement.__file__),
+            "soap_envelope.xml",
         )
     ),
     "system": settings.SP_ABO_SYSTEM,
@@ -37,7 +38,7 @@ abo_dependencies = {
 }
 
 
-def get_cpr_delta_udtraek(sincedate):
+def cpr_get_delta_udtraek(sincedate):
     """ returns a dict like
     {
         "181229": {  # a date >= sincedate
@@ -55,27 +56,29 @@ def get_cpr_delta_udtraek(sincedate):
     return cpr_udtraek.delta(sincedate)
 
 
-def add_cpr_subscription(pnr):
+def cpr_add_subscription(pnr):
     logger.debug("add subscription for %s", pnr)
-    result = change_cpr_subscription(pnr, settings.ADD_PNR_SUBSCRIPTION)
+    result = cpr_change_subscription(pnr, settings.ADD_PNR_SUBSCRIPTION)
     return result == "ADDED"
 
 
-def remove_cpr_subscription(pnr):
+def cpr_remove_subscription(pnr):
     logger.debug("remove subscription for %s", pnr)
-    result = change_cpr_subscription(pnr, settings.REMOVE_PNR_SUBSCRIPTION)
+    result = cpr_change_subscription(pnr, settings.REMOVE_PNR_SUBSCRIPTION)
     return result == "REMOVED"
 
 
-def get_all_subscribed_cprs():
-    logger.debug("get_all_subscribed_cprs")
+def cpr_get_all_subscribed():
+    logger.debug("cpr_get_all_subscribed")
     return []
 
 
-def change_cpr_subscription(pnr, operation):
+def cpr_change_subscription(pnr, operation):
     cpr_abonnement_response_envelope = pnr_subscription(
         dependencies_dict=abo_dependencies, pnr=pnr, operation=operation
     )
     reply = xmltodict.parse(cpr_abonnement_response_envelope)
     operation_response_key = "ns3:{}Response".format(operation)
-    return reply["soap:Envelope"]["soap:Body"][operation_response_key]["ns3:Result"]
+    return reply["soap:Envelope"]["soap:Body"][operation_response_key][
+        "ns3:Result"
+    ]

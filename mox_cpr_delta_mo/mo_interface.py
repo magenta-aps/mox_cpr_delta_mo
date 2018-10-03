@@ -7,19 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import requests
-
 import logging
+from settings import MORA_HTTP_BASE, MORA_ORG_UUID
 
 logger = logging.getLogger("mox_cpr_delta_mo")
 
-from settings import MORA_HTTP_BASE, MORA_ORG_UUID
-
 
 def mora_url(url):
-    """format url like 
+    """format url like
     {BASE}/o/{ORG}/e
     params like
-    {'limit':0, 'query':''} 
+    {'limit':0, 'query':''}
     """
     url = url.format(BASE=MORA_HTTP_BASE, ORG=MORA_ORG_UUID)
     logger.debug(url)
@@ -43,19 +41,26 @@ def mora_post(url, **params):
 
 
 def mora_get_all_cpr_numbers():
-    alluuids = [e["uuid"] for e in mora_get("{BASE}/o/{ORG}/e").json()["items"]]
+    alluuids = [
+        e["uuid"] for e in mora_get("{BASE}/o/{ORG}/e").json()["items"]
+    ]
     return [
-        mora_get("{BASE}/e/" + uuid + "/").json().get("cpr_no") for uuid in alluuids
+        mora_get("{BASE}/e/" + uuid + "/").json().get("cpr_no")
+        for uuid in alluuids
     ]
 
 
 def mora_eployees_from_cpr(pnr):
     uuids_from_cpr = [
-        e["uuid"] for e in mora_get("{BASE}/o/{ORG}/e", query=pnr).json()["items"]
+        e["uuid"]
+        for e in mora_get("{BASE}/o/{ORG}/e", query=pnr).json()["items"]
     ]
     return [
         e
-        for e in [mora_get("{BASE}/e/" + uuid + "/").json() for uuid in uuids_from_cpr]
+        for e in [
+            mora_get("{BASE}/e/" + uuid + "/").json()
+            for uuid in uuids_from_cpr
+        ]
         if e.get("cpr_no") == pnr
     ]
 
@@ -66,7 +71,9 @@ def mora_update_person_by_cprnumber(fromdate, pnr, changes):
     if not {"fornavn", "mellemnavn", "efternavn"} <= set(changes.keys()):
         return False
     elif changes["mellemnavn"]:
-        relevant_changes["navn"] = "%(fornavn)s %(mellemnavn)s %(efternavn)s" % changes
+        relevant_changes["navn"] = (
+            "%(fornavn)s %(mellemnavn)s %(efternavn)s" % changes
+        )
     else:
         relevant_changes["navn"] = "%(fornavn)s %(efternavn)s" % changes
 

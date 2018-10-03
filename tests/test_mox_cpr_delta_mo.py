@@ -5,10 +5,10 @@ import mox_cpr_delta_mo.__main__ as mox
 
 mox.mora_get_all_cpr_numbers = lambda:["0101621234","0202621234"] 
 mox.mora_update_person_by_cprnumber = lambda fromdate, pnr, changes: None
-mox.get_cpr_delta_udtraek = lambda sincedate: {sincedate:{"0101621234":{'fornavn':"Bent"}}}
-mox.add_cpr_subscription = lambda pnr: True
-mox.remove_cpr_subscription = lambda pnr: False
-mox.get_all_subscribed_cprs = lambda: ["0101621234","0303631234"] 
+mox.cpr_get_delta_udtraek = lambda sincedate: {sincedate:{"0101621234":{'fornavn':"Bent"}}}
+mox.cpr_add_subscription = lambda pnr: True
+mox.cpr_remove_subscription = lambda pnr: False
+mox.cpr_get_all_subscribed = lambda: ["0101621234","0303631234"] 
 
 logstash=[]
 def logger(*args, **kwargs):

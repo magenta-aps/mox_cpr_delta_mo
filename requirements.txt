@@ -1,3 +1,6 @@
 ../cpr_abonnement
 ../cpr_udtraek
+requests
+flake8
+black
 
