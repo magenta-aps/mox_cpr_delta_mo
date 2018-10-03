@@ -11,6 +11,8 @@ There is little to configure in the program other than the settings.py which are
 * cpr_abonnement settings  - settings related to putting cpr numbers into delta-dump-subscription
 * mora settings - settings necessary for querying MO for cpr numbers for subscription and updating mo with the results of the delta dump
 
+Here is a settings file filled with sample values
+
 ``` python
 
     # mox settings
