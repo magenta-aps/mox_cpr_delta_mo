@@ -44,7 +44,9 @@ def mora_post(url, **params):
 
 def mora_get_all_cpr_numbers():
     alluuids = [e["uuid"] for e in mora_get("{BASE}/o/{ORG}/e").json()["items"]]
-    return [mora_get("{BASE}/e/" + uuid + "/").json().get("cpr_no") for uuid in alluuids]
+    return [
+        mora_get("{BASE}/e/" + uuid + "/").json().get("cpr_no") for uuid in alluuids
+    ]
 
 
 def mora_eployees_from_cpr(pnr):
