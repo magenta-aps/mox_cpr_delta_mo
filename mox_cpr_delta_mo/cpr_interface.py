@@ -75,7 +75,6 @@ def cpr_get_all_subscribed():
     logger.debug("cpr_get_all_subscribed")
     cpr_abonnement_response_envelope = pnr_all_subscribed(
         dependencies_dict=abo_dependencies, 
-        pnr=pnr, 
         operation=settings.GET_PNR_SUBSCRIPTIONS,
     )
     return []
