@@ -18,7 +18,7 @@ def read(fname):
 
 setup(
     name = "mox_cpr_delta_mo",
-    version = "0.0.1",
+    version = read("VERSION").strip(),
     author = "Jørgen Gårdsted Jørgensen, Heini Leander Ovason",
     author_email = "jgj@magenta-aps.dk",
     description = ("mox agent for subscribing for updates from danish cpr registry and updating mo with results"),
