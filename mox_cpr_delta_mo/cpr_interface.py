@@ -73,11 +73,15 @@ def cpr_remove_subscription(pnr):
 
 def cpr_get_all_subscribed():
     logger.debug("cpr_get_all_subscribed")
+    operation = settings.GET_PNR_SUBSCRIPTIONS
     cpr_abonnement_response_envelope = pnr_all_subscribed(
         dependencies_dict=abo_dependencies, 
-        operation=settings.GET_PNR_SUBSCRIPTIONS,
+        operation=operation,
     )
-    return []
+    reply = xmltodict.parse(cpr_abonnement_response_envelope)
+    operation_response_key = "ns3:{}Response".format(operation)
+    return reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
+        "ns2:PNR",[])
 
 
 def cpr_change_subscription(pnr, operation):
