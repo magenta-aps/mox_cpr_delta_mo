@@ -1,0 +1,6 @@
+git+https://github.com/magenta-aps/cpr_udtraek
+git+https://github.com/magenta-aps/cpr_abonnement
+requests
+flake8
+black
+
