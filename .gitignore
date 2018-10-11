@@ -1,3 +1,9 @@
+# certifikater og settings
+settings.py
+*.p12
+*.crt
+*.pfx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
