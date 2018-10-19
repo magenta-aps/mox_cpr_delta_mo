@@ -18,6 +18,7 @@ Here is a settings file filled with sample values
     # mox settings
     #debug:10, #warn:30
     MOX_LOG_LEVEL = 10
+    MOX_JSON_CACHE = "var/myfile.json"  #  programes cached state
 
     # cpr_udtraek settings
     ID_RSA_USER = "sftpcpr"  # the user account on the sftp-server

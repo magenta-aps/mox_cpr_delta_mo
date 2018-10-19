@@ -9,6 +9,8 @@
 import argparse
 import datetime
 import logging
+import os
+import json
 
 from mox_cpr_delta_mo import (
     mora_get_all_cpr_numbers,
@@ -18,7 +20,12 @@ from mox_cpr_delta_mo import (
     cpr_remove_subscription,
     cpr_get_all_subscribed,
 )
-from settings import MOX_LOG_LEVEL
+
+from settings import (
+    MOX_LOG_LEVEL,
+    MOX_JSON_CACHE,
+    SFTP_DOWNLOAD_PATH
+)
 
 # set warning-level for all loggers
 [
@@ -46,17 +53,44 @@ def update_cpr_subscriptions():
 
 
 def cpr_delta_update_mo(sincedate):
+    # let python do the Y2K math
+    nextdate = datetime.datetime.strptime(sincedate, "%y%m%d")
+
     for date, citizens in cpr_get_delta_udtraek(sincedate).items():
         # let python do the Y2K math
-        fromdate = datetime.datetime.strptime(date, "%y%m%d").strftime(
-            "%Y-%m-%d"
-        )
+        nextdate = fromdate = datetime.datetime.strptime(date, "%y%m%d")
+        fromdatestr = fromdate.strftime("%Y-%m-%d")
+
         for pnr, changes in citizens.items():
-            mora_update_person_by_cprnumber(fromdate, pnr, changes)
+            mora_update_person_by_cprnumber(fromdatestr, pnr, changes)
+        if fromdate > nextdate:
+            nextdate = fromdate
+
+    nextdate += datetime.timedelta(days=1)
+    return nextdate.strftime("%y%m%d")
+
+
+def read_cache(path):
+    if not os.path.exists(path):
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        cache = {}
+    else:
+        cache = json.load(open(path))
+    return cache
+
+
+def write_cache(path, cache):
+    json.dump(cache, open(path, "w"))
 
 
 if __name__ == "__main__":
+
+    cache = read_cache(MOX_JSON_CACHE)
     parser = argparse.ArgumentParser()
+
+    if not os.path.exists(SFTP_DOWNLOAD_PATH):
+        os.makedirs(SFTP_DOWNLOAD_PATH)
 
     parser.add_argument(
         "--update-cpr-subscriptions",
@@ -75,9 +109,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--cpr-delta-since",
         help="retrieve data from cpr-kontoret since this date "
-        "given as YYmmdd (180921)",
+        "given as YYmmdd (181018)",
         type=str,
-        default="180927",
+        default=cache.get("nextdate", "181018")
     )
 
     args = parser.parse_args()
@@ -86,4 +120,6 @@ if __name__ == "__main__":
         update_cpr_subscriptions()
 
     if args.cpr_delta_update_mo:
-        cpr_delta_update_mo(args.cpr_delta_since)
+        cache["nextdate"] = cpr_delta_update_mo(args.cpr_delta_since)
+
+    write_cache(MOX_JSON_CACHE, cache)
