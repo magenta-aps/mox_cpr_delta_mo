@@ -80,8 +80,12 @@ def cpr_get_all_subscribed():
     )
     reply = xmltodict.parse(cpr_abonnement_response_envelope)
     operation_response_key = "ns3:{}Response".format(operation)
-    return reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
+    x=reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
         "ns2:PNR",[])
+    if isinstance(x,list):
+        return x
+    else:
+        return[x]
 
 
 def cpr_change_subscription(pnr, operation):
