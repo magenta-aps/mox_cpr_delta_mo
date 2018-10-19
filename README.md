@@ -18,6 +18,7 @@ Here is a settings file filled with sample values
     # mox settings
     #debug:10, #warn:30
     MOX_LOG_LEVEL = 10
+    MOX_JSON_CACHE = "var/myfile.json"  #  programes cached state
 
     # cpr_udtraek settings
     ID_RSA_USER = "sftpcpr"  # the user account on the sftp-server
@@ -38,10 +39,13 @@ Here is a settings file filled with sample values
     SP_ABO_SERVICE = "0fb8a2c0-c6e2-11e8-8724-234888bfbd3a"  # uuid of the service
     ADD_PNR_SUBSCRIPTION = "AddPNRSubscription"  # name of action (for envelope)
     REMOVE_PNR_SUBSCRIPTION = "RemovePNRSubscription"  # name of action (for envelope)
+    GET_PNR_SUBSCRIPTIONS = "GetAllFilters"
+
 
     # mora settings 
     MORA_HTTP_BASE = "http://10.0.3.161:5000/service"  # MO http base - should end with '/service'
     MORA_ORG_UUID = "0fb8a2c0-c6e2-11e8-8724-234888bfbd3a"  # The MO organisation uuid
+    MORA_CA_BUNDLE = False  # path to ca_bundle or False to opt out of ca verification
 
 ```
 Running the program (settings.py must be in python-path)

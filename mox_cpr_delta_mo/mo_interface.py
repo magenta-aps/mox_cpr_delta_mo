@@ -8,7 +8,7 @@
 
 import requests
 import logging
-from settings import MORA_HTTP_BASE, MORA_ORG_UUID
+from settings import MORA_HTTP_BASE, MORA_ORG_UUID, MORA_CA_BUNDLE
 
 logger = logging.getLogger("mox_cpr_delta_mo")
 
@@ -27,7 +27,7 @@ def mora_url(url):
 def mora_get(url, **params):
     url = mora_url(url)
     try:
-        return requests.get(url, params=params)
+        return requests.get(url, params=params, verify=MORA_CA_BUNDLE)
     except Exception as e:
         logger.exception(url)
 
@@ -35,7 +35,7 @@ def mora_get(url, **params):
 def mora_post(url, **params):
     url = mora_url(url)
     try:
-        return requests.post(url, params=params)
+        return requests.post(url, params=params, verify=MORA_CA_BUNDLE)
     except Exception as e:
         logger.exception(url)
 
