@@ -21,8 +21,8 @@ from mox_cpr_delta_mo import (
     cpr_get_all_subscribed,
 )
 
-from settings import(
-    MOX_LOG_LEVEL, 
+from settings import (
+    MOX_LOG_LEVEL,
     MOX_JSON_CACHE,
     SFTP_DOWNLOAD_PATH
 )
@@ -36,7 +36,6 @@ from settings import(
 logging.basicConfig(level=MOX_LOG_LEVEL)
 logger = logging.getLogger("mox_cpr_delta_mo")
 logger.setLevel(logging.DEBUG)
-
 
 
 def update_cpr_subscriptions():
@@ -57,12 +56,11 @@ def cpr_delta_update_mo(sincedate):
     # let python do the Y2K math
     nextdate = datetime.datetime.strptime(sincedate, "%y%m%d")
 
-
     for date, citizens in cpr_get_delta_udtraek(sincedate).items():
         # let python do the Y2K math
-        nextdate =  fromdate = datetime.datetime.strptime(date, "%y%m%d")
+        nextdate = fromdate = datetime.datetime.strptime(date, "%y%m%d")
         fromdatestr = fromdate.strftime("%Y-%m-%d")
-        
+
         for pnr, changes in citizens.items():
             mora_update_person_by_cprnumber(fromdatestr, pnr, changes)
         if fromdate > nextdate:
@@ -81,9 +79,9 @@ def read_cache(path):
         cache = json.load(open(path))
     return cache
 
-def write_cache(path, cache):
-    json.dump(cache,open(path,"w"))
 
+def write_cache(path, cache):
+    json.dump(cache, open(path, "w"))
 
 
 if __name__ == "__main__":
@@ -113,7 +111,7 @@ if __name__ == "__main__":
         help="retrieve data from cpr-kontoret since this date "
         "given as YYmmdd (181018)",
         type=str,
-        default=cache.get("nextdate","181018"),
+        default=cache.get("nextdate", "181018")
     )
 
     args = parser.parse_args()
@@ -123,6 +121,5 @@ if __name__ == "__main__":
 
     if args.cpr_delta_update_mo:
         cache["nextdate"] = cpr_delta_update_mo(args.cpr_delta_since)
-        
+
     write_cache(MOX_JSON_CACHE, cache)
-        
