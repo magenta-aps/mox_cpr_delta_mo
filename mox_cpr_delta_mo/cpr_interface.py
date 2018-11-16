@@ -75,14 +75,14 @@ def cpr_get_all_subscribed():
     logger.debug("cpr_get_all_subscribed")
     operation = settings.GET_PNR_SUBSCRIPTIONS
     cpr_abonnement_response_envelope = pnr_all_subscribed(
-        dependencies_dict=abo_dependencies, 
+        dependencies_dict=abo_dependencies,
         operation=operation,
     )
     reply = xmltodict.parse(cpr_abonnement_response_envelope)
     operation_response_key = "ns3:{}Response".format(operation)
-    x=reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
-        "ns2:PNR",[])
-    if isinstance(x,list):
+    x = reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
+        "ns2:PNR", [])
+    if isinstance(x, list):
         return x
     else:
         return[x]
