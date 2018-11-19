@@ -21,7 +21,7 @@ from mox_cpr_delta_mo import (
     cpr_get_all_subscribed,
 )
 
-from settings import (
+from .settings import (
     MOX_LOG_LEVEL,
     MOX_JSON_CACHE,
     SFTP_DOWNLOAD_PATH

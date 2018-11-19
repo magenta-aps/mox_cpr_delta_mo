@@ -8,7 +8,7 @@
 
 import requests
 import logging
-from settings import MORA_HTTP_BASE, MORA_ORG_UUID, MORA_CA_BUNDLE
+from .settings import MORA_HTTP_BASE, MORA_ORG_UUID, MORA_CA_BUNDLE
 
 logger = logging.getLogger("mox_cpr_delta_mo")
 
