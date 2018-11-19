@@ -11,7 +11,7 @@ There is little to configure in the program other than the settings.ini which ar
 * cpr_abonnement settings  - settings related to putting cpr numbers into delta-dump-subscription
 * mora settings - settings necessary for querying MO for cpr numbers for subscription and updating mo with the results of the delta dump
 
-Here is a settings.ini file filled with sample values
+Here is a settings.ini file with sample values/explanations
 
 You can specify the location of this file through the environment variable **MOX_CPR_DELTA_MO_CONFIG**
 

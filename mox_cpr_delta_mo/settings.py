@@ -2,8 +2,8 @@ import os
 import pathlib
 import configparser
 
-inipaths = [ p for p in [
-        pathlib.Path(os.environ.get("MOX_CPR_DELTA_MO_CONFIG","")),
+inipaths = [p for p in [
+        pathlib.Path(os.environ.get("MOX_CPR_DELTA_MO_CONFIG", "")),
         pathlib.Path("") / "settings.ini",
         pathlib.Path(__file__).absolute() / "settings.ini",
     ] if p.is_file()
