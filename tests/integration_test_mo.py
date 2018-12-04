@@ -6,6 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
 import functools
 import unittest
 import logging
@@ -21,6 +22,10 @@ mo.logger.debug = functools.partial(logger, logging.DEBUG)
 
 
 class TestMoxCprDeltaMo(unittest.TestCase):
+    # requires a fresh run of
+    # os2mo/backend/flask.sh lora import spreadsheets \
+    #     tests/fixtures/importing/BALLERUP.csv
+    # for each invocation of the tests
     def setUp(self):
         logstash.clear()
 

@@ -8,9 +8,18 @@
 
 import requests
 import logging
-from .settings import MORA_HTTP_BASE, MORA_ORG_UUID, MORA_CA_BUNDLE
+from .settings import (
+    MORA_HTTP_BASE,
+    MORA_ORG_UUID,
+    MORA_CA_BUNDLE,
+    SAML_API_TOKEN,
+)
 
 logger = logging.getLogger("mox_cpr_delta_mo")
+
+mora_headers = {
+    "SESSION": SAML_API_TOKEN
+}
 
 
 def mora_url(url):
@@ -27,7 +36,14 @@ def mora_url(url):
 def mora_get(url, **params):
     url = mora_url(url)
     try:
-        return requests.get(url, params=params, verify=MORA_CA_BUNDLE)
+        r = requests.get(
+            url,
+            headers=mora_headers,
+            params=params,
+            verify=MORA_CA_BUNDLE
+        )
+        r.status_code == requests.codes.ok or r.raise_for_status()
+        return r
     except Exception:
         logger.exception(url)
 
@@ -35,7 +51,14 @@ def mora_get(url, **params):
 def mora_post(url, **params):
     url = mora_url(url)
     try:
-        return requests.post(url, verify=MORA_CA_BUNDLE, **params)
+        r = requests.post(
+            url,
+            headers=mora_headers,
+            verify=MORA_CA_BUNDLE,
+            **params
+        )
+        r.status_code == requests.codes.ok or r.raise_for_status()
+        return r
     except Exception:
         logger.exception(url)
 

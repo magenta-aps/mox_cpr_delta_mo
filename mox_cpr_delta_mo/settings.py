@@ -16,7 +16,8 @@ else:
 
 config = configparser.ConfigParser(defaults={
     "MOX_LOG_LEVEL": "10",
-    "MOX_JSON_CACHE": "var/myfile.json",
+    "MOX_LOG_FILE": "",  # "" sends log to console
+    "MOX_JSON_CACHE": "var/mox_cpr_delta_mo.json",
     "ADD_PNR_SUBSCRIPTION": "AddPNRSubscription",
     "REMOVE_PNR_SUBSCRIPTION": "RemovePNRSubscription",
     "GET_PNR_SUBSCRIPTIONS": "GetAllFilters",
@@ -27,6 +28,7 @@ settings = config["settings"]
 
 
 MOX_LOG_LEVEL = int(settings["MOX_LOG_LEVEL"])
+MOX_LOG_FILE = settings["MOX_LOG_FILE"]
 MOX_JSON_CACHE = settings["MOX_JSON_CACHE"]
 ID_RSA_USER = settings["ID_RSA_USER"]
 SFTP_SERVER = settings["SFTP_SERVER"]
@@ -48,3 +50,4 @@ GET_PNR_SUBSCRIPTIONS = settings["GET_PNR_SUBSCRIPTIONS"]
 MORA_HTTP_BASE = settings["MORA_HTTP_BASE"]
 MORA_ORG_UUID = settings["MORA_ORG_UUID"]
 MORA_CA_BUNDLE = bool(settings["MORA_CA_BUNDLE"])
+SAML_API_TOKEN = settings["SAML_API_TOKEN"]

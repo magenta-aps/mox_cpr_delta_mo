@@ -51,7 +51,6 @@ udtraek_settings = {
 }
 
 
-
 def cpr_get_delta_udtraek(sincedate):
     """ returns a dict like
     {
