@@ -10,7 +10,7 @@
 import os
 import logging
 import xmltodict
-import settings
+from . import settings
 
 # settings must be imported before cpr_udtraek and cpr_abonnement
 import cpr_udtraek
@@ -40,6 +40,16 @@ abo_dependencies = {
     "service": settings.SP_ABO_SERVICE,
 }
 
+udtraek_settings = {
+    'user': settings.ID_RSA_USER,
+    'host': settings.SFTP_SERVER,
+    'port': settings.SFTP_SERVER_PORT,
+    'remote_path': settings.SFTP_SERVER_INIT_PATH,
+    'local_path': settings.SFTP_DOWNLOAD_PATH,
+    'ssh_key_path': settings.ID_RSA_SP_PATH,
+    'ssh_key_passphrase': settings.ID_RSA_SP_PASSPHRASE,
+}
+
 
 def cpr_get_delta_udtraek(sincedate):
     """ returns a dict like
@@ -56,7 +66,7 @@ def cpr_get_delta_udtraek(sincedate):
         },
     }
     """
-    return cpr_udtraek.delta(sincedate)
+    return cpr_udtraek.delta(sincedate, settings=udtraek_settings)
 
 
 def cpr_add_subscription(pnr):
@@ -75,14 +85,14 @@ def cpr_get_all_subscribed():
     logger.debug("cpr_get_all_subscribed")
     operation = settings.GET_PNR_SUBSCRIPTIONS
     cpr_abonnement_response_envelope = pnr_all_subscribed(
-        dependencies_dict=abo_dependencies, 
+        dependencies_dict=abo_dependencies,
         operation=operation,
     )
     reply = xmltodict.parse(cpr_abonnement_response_envelope)
     operation_response_key = "ns3:{}Response".format(operation)
-    x=reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
-        "ns2:PNR",[])
-    if isinstance(x,list):
+    x = reply["soap:Envelope"]["soap:Body"][operation_response_key].get(
+        "ns2:PNR", [])
+    if isinstance(x, list):
         return x
     else:
         return[x]

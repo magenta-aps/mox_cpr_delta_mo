@@ -1,3 +1,9 @@
+version 0.1.0
+
+    #24941 program is now a module and it no longer provides settings.py for 
+      imported subpcakages
+    #24941 saml authentication
+
 version 0.0.2
 
     program state saved as json, currently next default start date

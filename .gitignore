@@ -1,5 +1,4 @@
-# certifikater og settings
-settings.py
+# certifikater
 *.p12
 *.crt
 *.pfx
@@ -59,7 +58,6 @@ coverage.xml
 
 # Django stuff:
 *.log
-settings.py
 db.sqlite3
 
 # Flask stuff:
@@ -109,3 +107,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# settings
+settings.ini
