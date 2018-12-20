@@ -10,7 +10,7 @@ inipaths = [p for p in [
 ]
 
 if not len(inipaths):
-    raise FileNotFoundError
+    inifile = ""
 else:
     inifile = inipaths[0]
 
@@ -21,9 +21,30 @@ config = configparser.ConfigParser(defaults={
     "ADD_PNR_SUBSCRIPTION": "AddPNRSubscription",
     "REMOVE_PNR_SUBSCRIPTION": "RemovePNRSubscription",
     "GET_PNR_SUBSCRIPTIONS": "GetAllFilters",
+    "ID_RSA_USER": "N/A",
+    "SFTP_SERVER": "N/A",
+    "SFTP_SERVER_PORT": "0",
+    "SFTP_SERVER_INIT_PATH": "N/A",
+    "SFTP_DOWNLOAD_PATH": "/tmp",
+    "ID_RSA_SP_PATH": "N/A",
+    "ID_RSA_SP_PASSPHRASE": "N/A",
+    "SP_ABO_SERVICE_ENDPOINT": "N/A",
+    "SP_ABO_CERTIFICATE": "N/A",
+    "SP_ABO_SOAP_REQUEST_ENVELOPE": "N/A",
+    "SP_ABO_SYSTEM": "N/A",
+    "SP_ABO_USER": "N/A",
+    "SP_ABO_SERVICE_AGREEMENT": "N/A",
+    "SP_ABO_SERVICE": "N/A",
+    "MORA_HTTP_BASE": "N/A",
+    "MORA_ORG_UUID": "N/A",
+    "MORA_CA_BUNDLE": "",
+    "SAML_API_TOKEN": "",
 })
+config["settings"] = {}
 
-config.read(str(inifile))
+if inifile:
+    config.read(str(inifile))
+
 settings = config["settings"]
 
 
