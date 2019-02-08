@@ -21,7 +21,7 @@ from mox_cpr_delta_mo import (
     cpr_get_all_subscribed,
 )
 
-from .settings import (
+from mox_cpr_delta_mo.settings import (
     MOX_LOG_LEVEL,
     MOX_LOG_FILE,
     MOX_JSON_CACHE,
@@ -67,7 +67,7 @@ def cpr_delta_update_mo(sincedate):
         if fromdate > nextdate:
             nextdate = fromdate
 
-    nextdate += datetime.timedelta(days=1)
+    nextdate = datetime.datetime.now()
     return nextdate.strftime("%y%m%d")
 
 
