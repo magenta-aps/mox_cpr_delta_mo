@@ -21,8 +21,9 @@ from mox_cpr_delta_mo import (
     cpr_get_all_subscribed,
 )
 
-from settings import (
+from mox_cpr_delta_mo.settings import (
     MOX_LOG_LEVEL,
+    MOX_LOG_FILE,
     MOX_JSON_CACHE,
     SFTP_DOWNLOAD_PATH
 )
@@ -33,7 +34,7 @@ from settings import (
     for i in logging.root.manager.loggerDict
 ]
 
-logging.basicConfig(level=MOX_LOG_LEVEL)
+logging.basicConfig(level=MOX_LOG_LEVEL, filename=MOX_LOG_FILE)
 logger = logging.getLogger("mox_cpr_delta_mo")
 logger.setLevel(logging.DEBUG)
 
@@ -66,7 +67,7 @@ def cpr_delta_update_mo(sincedate):
         if fromdate > nextdate:
             nextdate = fromdate
 
-    nextdate += datetime.timedelta(days=1)
+    nextdate = datetime.datetime.now()
     return nextdate.strftime("%y%m%d")
 
 
@@ -117,9 +118,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.update_cpr_subscriptions:
-        update_cpr_subscriptions()
+        try:
+            update_cpr_subscriptions()
+        except Exception as e:
+            logger.exception(e)
 
     if args.cpr_delta_update_mo:
-        cache["nextdate"] = cpr_delta_update_mo(args.cpr_delta_since)
+        try:
+            cache["nextdate"] = cpr_delta_update_mo(args.cpr_delta_since)
+        except Exception as e:
+            logger.exception(e)
 
     write_cache(MOX_JSON_CACHE, cache)
