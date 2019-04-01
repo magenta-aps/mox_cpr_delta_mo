@@ -51,10 +51,36 @@ You can specify the location of this file through the environment variable **MOX
     MORA_CA_BUNDLE = path to ca_bundle or False to opt out of ca verification
 
 ```
-Running the program (settings.py must be in python-path)
+Running the program in a typical setup with a cron file wwhere You want to 
+process changes since last time and set any new employes into subscription would be
 
 ``` bash
-python -m mox_cpr_delta_mo    
+
+python -m mox_cpr_delta_mo --update-cpr-subscriptions
+
+```
+
+Program has help
+
+``` bash
+
+python -m mox_cpr_delta_mo --help
+
+usage: __main__.py [-h] [--update-cpr-subscriptions] [--cpr-delta-update-mo]
+                   [--cpr-delta-since CPR_DELTA_SINCE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --update-cpr-subscriptions
+                        find subscriptions for all cpr-numbers, update
+                        subscriptions for the ones that are missing in
+                        subscrition, remove the ones missing in mora
+  --cpr-delta-update-mo
+                        retrieve data from cpr-kontoret and update mora
+  --cpr-delta-since CPR_DELTA_SINCE
+                        retrieve data from cpr-kontoret since this date given
+                        as YYmmdd (181018)
+
 ```
 
 

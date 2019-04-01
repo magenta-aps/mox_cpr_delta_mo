@@ -34,14 +34,17 @@ from mox_cpr_delta_mo.settings import (
     for i in logging.root.manager.loggerDict
 ]
 
-logging.basicConfig(level=MOX_LOG_LEVEL, filename=MOX_LOG_FILE)
+logging.basicConfig(
+    format='%(levelname)s %(asctime)s %(name)s %(message)s',
+    level=MOX_LOG_LEVEL,
+    filename=MOX_LOG_FILE
+)
 logger = logging.getLogger("mox_cpr_delta_mo")
 logger.setLevel(logging.DEBUG)
 
 
 def update_cpr_subscriptions():
     "add or remove subscriptions according to mora data"
-    logger.debug("update_cpr_subscriptions started")
     must_subscribe = set(mora_get_all_cpr_numbers())
     are_subscribed = set(cpr_get_all_subscribed())
     add_set = must_subscribe - are_subscribed
@@ -50,7 +53,6 @@ def update_cpr_subscriptions():
         cpr_remove_subscription(pnr)
     for pnr in add_set:
         cpr_add_subscription(pnr)
-    logger.debug("update_cpr_subscriptions ended")
 
 
 def cpr_delta_update_mo(sincedate):
@@ -116,17 +118,23 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    logger.info("starting program with args: %r", args)
 
     if args.update_cpr_subscriptions:
+        logger.info("start adding new subscritions")
         try:
             update_cpr_subscriptions()
         except Exception as e:
             logger.exception(e)
+        logger.info("end adding new subscritions")
 
     if args.cpr_delta_update_mo:
+        logger.info("start updating os2mo - updates since %s",
+                    args.cpr_delta_since)
         try:
             cache["nextdate"] = cpr_delta_update_mo(args.cpr_delta_since)
         except Exception as e:
             logger.exception(e)
+        logger.info("end updating os2mo")
 
     write_cache(MOX_JSON_CACHE, cache)
