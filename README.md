@@ -51,7 +51,7 @@ You can specify the location of this file through the environment variable **MOX
     MORA_CA_BUNDLE = path to ca_bundle or False to opt out of ca verification
 
 ```
-Running the program in a typical setup with a cron file wwhere You want to 
+Running the program in a typical setup with a cron file where You want to 
 process changes since last time and set any new employes into subscription would be
 
 ``` bash
