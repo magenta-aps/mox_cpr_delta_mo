@@ -115,6 +115,7 @@ def mora_update_person_by_cprnumber(fromdate, pnr, changes):
         mora_post(
             url="{BASE}/details/edit",
             json=list_of_edits,
+            params={"force": 1}
         )
     else:
         logger.warning("%s not found in os2mo", pnr)

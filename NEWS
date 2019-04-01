@@ -1,3 +1,7 @@
+version 0.1.1
+
+    #28143 - force flag added for changes to a person happened in the past
+
 version 0.1.0
 
     #26883 - incorporating of changes from ava
