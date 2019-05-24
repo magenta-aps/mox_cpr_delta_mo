@@ -89,13 +89,15 @@ def mora_eployees_from_cpr(pnr):
 
 
 def mora_update_person_by_cprnumber(fromdate, pnr, changes):
-    # skip if no changes
+    if not { "fornavn", "mellemnavn", "efternavn" } <= set(changes.keys()):
+        logger.debug("no name changes for %s", pnr)
+        return False
+
     relevant_changes = {
         "validity": {"from": fromdate},
     }
-    if not {"fornavn", "mellemnavn", "efternavn"} <= set(changes.keys()):
-        return False
-    elif changes["mellemnavn"]:
+
+    if changes["mellemnavn"]:
         relevant_changes["name"] = (
             "%(fornavn)s %(mellemnavn)s %(efternavn)s" % changes
         )
@@ -110,6 +112,9 @@ def mora_update_person_by_cprnumber(fromdate, pnr, changes):
             "uuid": e["uuid"],
             "data": relevant_changes,
         })
+
+    for i in list_of_edits:
+        logger.debug("%s has changes in name", i["uuid"])
 
     if len(list_of_edits):
         mora_post(
