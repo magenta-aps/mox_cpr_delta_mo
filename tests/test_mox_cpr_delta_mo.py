@@ -11,24 +11,19 @@ mox.cpr_add_subscription = lambda pnr: True
 mox.cpr_remove_subscription = lambda pnr: False
 mox.cpr_get_all_subscribed = lambda: ["0101621234", "0303631234"]
 
-
-def logger(*args, **kwargs):
-    logstash.append((args, kwargs))
-
-
-logstash = []
-mox.logger.debug = functools.partial(logger, logging.DEBUG)
-
-
 class TestMoxCprDeltaMo(unittest.TestCase):
+
     def setUp(self):
-        logstash.clear()
+        self.logstash = []
+        def logger(*args, **kwargs):
+            self.logstash.append((args, kwargs))
+        mox.logger.debug = functools.partial(logger, logging.DEBUG)
 
     def test_update_cpr_subscriptions(self):
         mox.update_cpr_subscriptions()
-        self.assertEqual(logstash[0], (
+        self.assertEqual(self.logstash[0], (
             (10, 'update_cpr_subscriptions started'), {})
         )
-        self.assertEqual(logstash[-1], (
+        self.assertEqual(self.logstash[-1], (
             (10, 'update_cpr_subscriptions ended'), {})
         )

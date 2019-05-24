@@ -45,6 +45,7 @@ logger.setLevel(logging.DEBUG)
 
 def update_cpr_subscriptions():
     "add or remove subscriptions according to mora data"
+    logger.debug("update_cpr_subscriptions started")
     must_subscribe = set(mora_get_all_cpr_numbers())
     are_subscribed = set(cpr_get_all_subscribed())
     add_set = must_subscribe - are_subscribed
@@ -53,6 +54,7 @@ def update_cpr_subscriptions():
         cpr_remove_subscription(pnr)
     for pnr in add_set:
         cpr_add_subscription(pnr)
+    logger.debug("update_cpr_subscriptions ended")
 
 
 def cpr_delta_update_mo(sincedate):
@@ -60,14 +62,14 @@ def cpr_delta_update_mo(sincedate):
     nextdate = datetime.datetime.strptime(sincedate, "%y%m%d")
 
     for date, citizens in cpr_get_delta_udtraek(sincedate).items():
+        logger.info("processing %d items for %s", len(titizens), date)
+
         # let python do the Y2K math
-        nextdate = fromdate = datetime.datetime.strptime(date, "%y%m%d")
+        fromdate = datetime.datetime.strptime(date, "%y%m%d")
         fromdatestr = fromdate.strftime("%Y-%m-%d")
 
         for pnr, changes in citizens.items():
             mora_update_person_by_cprnumber(fromdatestr, pnr, changes)
-        if fromdate > nextdate:
-            nextdate = fromdate
 
     nextdate = datetime.datetime.now()
     return nextdate.strftime("%y%m%d")
