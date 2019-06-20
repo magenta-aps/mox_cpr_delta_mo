@@ -39,6 +39,7 @@ config = configparser.ConfigParser(defaults={
     "MORA_ORG_UUID": "N/A",
     "MORA_CA_BUNDLE": "",
     "SAML_API_TOKEN": "",
+    "MORA_DIVIDED_NAME": "no",
 })
 config["settings"] = {}
 
@@ -70,5 +71,6 @@ REMOVE_PNR_SUBSCRIPTION = settings["REMOVE_PNR_SUBSCRIPTION"]
 GET_PNR_SUBSCRIPTIONS = settings["GET_PNR_SUBSCRIPTIONS"]
 MORA_HTTP_BASE = settings["MORA_HTTP_BASE"]
 MORA_ORG_UUID = settings["MORA_ORG_UUID"]
-MORA_CA_BUNDLE = bool(settings["MORA_CA_BUNDLE"])
+MORA_CA_BUNDLE = settings["MORA_CA_BUNDLE"]
+MORA_DIVIDED_NAME = not settings["MORA_DIVIDED_NAME"] in ["0", "false", "no"]
 SAML_API_TOKEN = settings["SAML_API_TOKEN"]
