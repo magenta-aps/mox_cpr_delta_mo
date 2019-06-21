@@ -43,12 +43,13 @@ You can specify the location of this file through the environment variable **MOX
     ADD_PNR_SUBSCRIPTION = AddPNRSubscription
     REMOVE_PNR_SUBSCRIPTION = RemovePNRSubscription
     GET_PNR_SUBSCRIPTIONS = GetAllFilters
-
+ 
 
     # mora settings 
     MORA_HTTP_BASE = MO http base - should end with '/service'
     MORA_ORG_UUID = The MO organisation uuid
     MORA_CA_BUNDLE = path to ca_bundle or False to opt out of ca verification
+    MORA_DIVIDED_NAME = true/false, yes/no, 1/0 - does os2mo support surname/givenname 
 
 ```
 Running the program in a typical setup with a cron file where You want to 
