@@ -13,6 +13,7 @@ from .settings import (
     MORA_ORG_UUID,
     MORA_CA_BUNDLE,
     SAML_API_TOKEN,
+    MORA_DIVIDED_NAME,
 )
 
 logger = logging.getLogger("mox_cpr_delta_mo")
@@ -57,6 +58,7 @@ def mora_post(url, **params):
             verify=MORA_CA_BUNDLE,
             **params
         )
+        logger.debug("post: %r", params)
         r.status_code == requests.codes.ok or r.raise_for_status()
         return r
     except Exception:
@@ -93,30 +95,41 @@ def mora_update_person_by_cprnumber(fromdate, pnr, changes):
         logger.debug("no name changes for %s", pnr)
         return False
 
-    relevant_changes = {
-        "validity": {"from": fromdate},
-    }
-
     if changes["mellemnavn"]:
-        relevant_changes["name"] = (
-            "%(fornavn)s %(mellemnavn)s %(efternavn)s" % changes
-        )
+        relevant_changes = {
+            "name": "%(fornavn)s %(mellemnavn)s %(efternavn)s" % changes,
+            "givenname": "%(fornavn)s %(mellemnavn)s" % changes,
+            "surname": changes["efternavn"]
+        }
     else:
-        relevant_changes["name"] = "%(fornavn)s %(efternavn)s" % changes
+        relevant_changes = {
+            "name": "%(fornavn)s %(efternavn)s" % changes,
+            "givenname": changes["fornavn"],
+            "surname": changes["efternavn"]
+        }
+
+    if MORA_DIVIDED_NAME:
+        relevant_changes.pop("name")
+    else:
+        relevant_changes.pop("givenname")
+        relevant_changes.pop("surname")
 
     list_of_edits = []
 
     for e in mora_eployees_from_cpr(pnr):
+        if relevant_changes.items() <= e.items():
+            logger.debug("skipping %s,  no relevant changes", e["uuid"])
+            continue
+
+        relevant_changes["validity"] = {"from": fromdate}
         list_of_edits.append({
             "type": "employee",
             "uuid": e["uuid"],
             "data": relevant_changes,
         })
 
-    for i in list_of_edits:
-        logger.debug("%s has changes in name", i["uuid"])
-
     if len(list_of_edits):
+        logger.info("updating employee %s", e["uuid"])
         mora_post(
             url="{BASE}/details/edit",
             json=list_of_edits,

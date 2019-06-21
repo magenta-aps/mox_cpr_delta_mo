@@ -36,6 +36,7 @@ class TestMoxCprDeltaMo(unittest.TestCase):
             self.fail(__doc__)
         mo.MORA_HTTP_BASE = os.environ["MORA_HTTP_BASE"]
         mo.MORA_ORG_UUID = os.environ.get("MORA_ORG_UUID", get_org_uuid())
+        mo.MORA_DIVIDED_NAME = False
 
     def test_mora_get_all_cpr_numbers(self):
         "get both cpr numbers in the system"
@@ -69,3 +70,8 @@ class TestMoxCprDeltaMo(unittest.TestCase):
         )
         employees = mo.mora_eployees_from_cpr(os.environ["MORA_TEST_PNR"])
         self.assertEqual([old_data[0]["name"]], [e["name"] for e in employees])
+
+    def test_mora_update_person_by_cprnumber_divided_name(self):
+        "rename Person to 'Mo Minsk Mohsen' and back again"
+        mo.MORA_DIVIDED_NAME = True
+        self.test_mora_update_person_by_cprnumber()

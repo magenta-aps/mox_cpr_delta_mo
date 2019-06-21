@@ -61,8 +61,8 @@ def cpr_delta_update_mo(sincedate):
     # let python do the Y2K math
     nextdate = datetime.datetime.strptime(sincedate, "%y%m%d")
 
-    for date, citizens in cpr_get_delta_udtraek(sincedate).items():
-        logger.info("processing %d items for %s", len(titizens), date)
+    for date, citizens in sorted(cpr_get_delta_udtraek(sincedate).items()):
+        logger.info("processing %d items for %s", len(citizens), date)
 
         # let python do the Y2K math
         fromdate = datetime.datetime.strptime(date, "%y%m%d")
