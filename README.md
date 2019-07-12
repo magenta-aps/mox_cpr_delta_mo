@@ -99,3 +99,14 @@ integration tests - With suitable testdata in Mora tests can be run like
 python -m unittest discover tests -p 'integration_test*'
 ```
 
+## Known Issues
+As this agent is fetching data through an SFTP service we use RSA keys to authenciate with the service. 
+The SFTP functionality is built on the library `paramiko` (https://www.paramiko.org).
+
+Paramiko does not currently support the pkcs8 format which is becoming a standard format in newer systems.
+
+  Milestones: https://github.com/paramiko/paramiko/milestone/22
+  Issue: https://github.com/paramiko/paramiko/issues/1015
+
+RSA keys **must be formatted as PEM** which is the default format generating rsa keys
+using the `ssh-keygen` tool on commonly used linux distros.
