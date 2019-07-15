@@ -20,11 +20,11 @@ setup(
     name = "mox_cpr_delta_mo",
     version = read("VERSION").strip(),
     author = "Jørgen Gårdsted Jørgensen, Heini Leander Ovason",
-    author_email = "jgj@magenta-aps.dk",
+    author_email = "info@magenta-aps.dk",
     description = ("mox agent for subscribing for updates from danish cpr registry and updating mo with results"),
     license = "MPL",
     keywords = "cpr mo mora lora",
-    url = "",
+    url = "https://github.com/magenta-aps/mox_cpr_delta_mo",
     packages=['mox_cpr_delta_mo'],
     long_description=read('README.md'),
     classifiers=[
