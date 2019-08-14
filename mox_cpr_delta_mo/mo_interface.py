@@ -128,12 +128,9 @@ def mora_update_person_by_cprnumber(fromdate, pnr, changes):
             "data": relevant_changes,
         })
 
-    if len(list_of_edits):
         logger.info("updating employee %s", e["uuid"])
         mora_post(
             url="{BASE}/details/edit",
             json=list_of_edits,
             params={"force": 1}
         )
-    else:
-        logger.warning("%s not found in os2mo", pnr)

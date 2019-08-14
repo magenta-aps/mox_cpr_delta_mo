@@ -1,7 +1,12 @@
+version 0.1.5
+
+    #30633: readme - explained cache file function and removed
+            wrong log message
+
 version 0.1.4
 
     Added description for SAML_API_TOKEN settings param
-    30618: Updated readme with  section and pkcs8 disclaimer
+    #30618: Updated readme with section and pkcs8 disclaimer
 
 version 0.1.3
 
