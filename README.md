@@ -19,9 +19,9 @@ You can specify the location of this file through the environment variable **MOX
 
     [settings]
     #mox settings
-    #debug:10, #warn:30
+    #log level examples : debug:10, error:20, warning:30
     MOX_LOG_LEVEL = 10
-    MOX_JSON_CACHE = var/myfile.json
+    MOX_JSON_CACHE = saved state between runs (eg. /var/filename.json)
 
     # cpr_udtraek settings
     ID_RSA_USER = the user account on the sftp-server
